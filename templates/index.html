@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción de aprobación estudiantil</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .contenedor {
+            max-width: 520px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 14px #0001;
+        }
+
+        h1 {
+            text-align: center;
+            color: #203864;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 12px;
+            background: #203864;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef3fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff0f0;
+            color: #9b1c1c;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+<div class="contenedor">
+    <h1>Predicción de aprobación estudiantil</h1>
+
+    <p>
+        Ingresa los datos del estudiante para obtener una
+        predicción del modelo MLP.
+    </p>
+
+    <form action="/predecir" method="post">
+        <label for="Tareas">Tareas</label>
+        <input id="Tareas" type="number" name="Tareas"
+               step="any" required
+               value="{{ datos.get('Tareas', '') }}">
+
+        <label for="Examenes">Exámenes</label>
+        <input id="Examenes" type="number" name="Examenes"
+               step="any" required
+               value="{{ datos.get('Examenes', '') }}">
+
+        <label for="Asistencia">Asistencia</label>
+        <input id="Asistencia" type="number" name="Asistencia"
+               step="any" required
+               value="{{ datos.get('Asistencia', '') }}">
+
+        <label for="Estudio_Horas">Horas de estudio</label>
+        <input id="Estudio_Horas" type="number" name="Estudio_Horas"
+               step="any" required
+               value="{{ datos.get('Estudio_Horas', '') }}">
+
+        <label for="Sueno_Horas">Horas de sueño</label>
+        <input id="Sueno_Horas" type="number" name="Sueno_Horas"
+               step="any" required
+               value="{{ datos.get('Sueno_Horas', '') }}">
+
+        <label for="Extracurriculares">
+            Extracurriculares (usa la codificación del conjunto de datos)
+        </label>
+        <input id="Extracurriculares" type="number"
+               name="Extracurriculares" step="any" required
+               value="{{ datos.get('Extracurriculares', '') }}">
+
+        <button type="submit">Predecir resultado</button>
+    </form>
+
+    {% if resultado is not none %}
+    <div class="resultado">
+        <h2>Resultado: {{ resultado }}</h2>
+        <p>
+            Confianza estimada para la clase predicha:
+            {{ probabilidad }}%
+        </p>
+        <small>
+            Es una estimación del modelo, no una garantía
+            del resultado académico.
+        </small>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
